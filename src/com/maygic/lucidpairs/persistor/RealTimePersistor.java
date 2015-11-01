@@ -6,20 +6,21 @@ import com.maygic.lucidpairs.ChangeRecord;
 
 public class RealTimePersistor extends AbstractPersistor {
 
+    private Map<String, String> pairs;
+
     public RealTimePersistor(FileInteraction fileItn) {
         super(fileItn);
     }
 
     @Override
     public void persist(ChangeRecord cr) {
-        // TODO Auto-generated method stub
-
+        fileItn.persist(pairs);
     }
 
     @Override
-    public Map<String, String> load() {
-        // TODO Auto-generated method stub
-        return null;
+    public void load(Map<String, String> pairs) {
+        this.pairs = pairs;
+        fileItn.load(pairs);
     }
 
 }

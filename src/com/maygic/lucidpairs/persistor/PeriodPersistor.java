@@ -21,9 +21,9 @@ public class PeriodPersistor extends AbstractPersistor {
     }
 
     @Override
-    public Map<String, String> load() {
+    public void load(Map<String, String> pairs) {
         // TODO Auto-generated method stub
-        return null;
+
     }
 
     /**
@@ -53,7 +53,8 @@ public class PeriodPersistor extends AbstractPersistor {
         public void run() {
 
             // sync pairs
-//            nonsyncPairs = new HashMap<String, String>(pairs); // TODO complate it later
+            // nonsyncPairs = new HashMap<String, String>(pairs); // TODO
+            // complate it later
 
             // start run
             while (running) {
@@ -95,4 +96,5 @@ public class PeriodPersistor extends AbstractPersistor {
             }
         }
     }
+
 }

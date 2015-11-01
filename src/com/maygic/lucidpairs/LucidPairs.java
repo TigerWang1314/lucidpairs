@@ -29,7 +29,7 @@ public class LucidPairs {
     void load() {
 
         // load datas
-        pairs = persistor.load();
+        persistor.load(pairs);
     }
 
     public void put(String name, String value) {

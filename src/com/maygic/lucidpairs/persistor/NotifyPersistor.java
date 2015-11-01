@@ -17,9 +17,8 @@ public class NotifyPersistor extends AbstractPersistor {
     }
 
     @Override
-    public Map<String, String> load() {
+    public void load(Map<String, String> pairs) {
         // TODO Auto-generated method stub
-        return null;
-    }
 
+    }
 }

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,8 +130,7 @@ public class FileInteraction {
         return value.replace(replace$N, "\n").replace(replace$R, "\r");
     }
 
-    public Map<String, String> load() {
-        Map<String, String> pairs = new HashMap<String, String>();
+    public void load(Map<String, String> pairs) {
 
         List<String> readLines = new ArrayList<String>();
 
@@ -153,8 +151,6 @@ public class FileInteraction {
             String value = untransfer(ls[1]);
             pairs.put(name, value);
         }
-
-        return pairs;
     }
 
     private boolean readFile(File file, List<String> readLines) throws Exception {

@@ -8,5 +8,5 @@ public interface Persistor {
 
     public void persist(ChangeRecord cr);
 
-    public Map<String, String> load();
+    public void load(Map<String, String> pairs);
 }
