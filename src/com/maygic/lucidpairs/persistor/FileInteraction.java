@@ -1,4 +1,4 @@
-package com.maygic.lucidpairs;
+package com.maygic.lucidpairs.persistor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
