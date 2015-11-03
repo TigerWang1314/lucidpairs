@@ -48,12 +48,7 @@ public class FileInteraction {
         // create folder
         File folder = new File(fileFolder);
         if (!folder.exists()) {
-            File baseFolder = folder.getParentFile();
-            if (baseFolder.exists() && !baseFolder.isDirectory()) {
-                throw new IOException(baseFolder.getAbsolutePath() + " is not a folder");
-            }
-            baseFolder.mkdirs(); // create folder
-            folder.createNewFile();
+            folder.mkdirs(); // create folder
         } else if (!folder.isDirectory()) {
             throw new IOException(folder.getAbsolutePath() + " is not a folder");
         }
@@ -131,7 +126,6 @@ public class FileInteraction {
     }
 
     public void load(Map<String, String> pairs) {
-
         List<String> readLines = new ArrayList<String>();
 
         // read from tmp
@@ -145,7 +139,7 @@ public class FileInteraction {
         }
 
         // parse pairs
-        for (String line : lines) {
+        for (String line : readLines) {
             String[] ls = line.split("=", 2);
             String name = ls[0];
             String value = untransfer(ls[1]);

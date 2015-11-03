@@ -13,6 +13,10 @@ public class LucidPairsFactory {
 
     private static final Object lock = new Object();
 
+    public static final LucidPairs pairs() {
+        return pairs(LucidProps.SUB_DEFAULT);
+    }
+
     public static final LucidPairs pairs(String name) {
         synchronized (lock) {
             LucidPairs pairs = pairsMap.get(name);
