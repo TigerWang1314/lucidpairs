@@ -8,22 +8,33 @@ import java.util.concurrent.TimeUnit;
 
 import com.maygic.lucidpairs.ChangeRecord;
 
-public class PeriodPersistor extends AbstractPersistor {
+public class FixedPersistor extends AbstractPersistor {
 
-    public PeriodPersistor(FileInteraction fileItn) {
+    private Map<String, String> fixedPairs;
+
+    private FixedPersistThread persistThread;
+
+    public FixedPersistor(FileInteraction fileItn) {
         super(fileItn);
     }
 
     @Override
     public void persist(ChangeRecord cr) {
-        // TODO Auto-generated method stub
-
+        persistThread.addChange(cr);
     }
 
     @Override
     public void load(Map<String, String> pairs) {
-        // TODO Auto-generated method stub
 
+        // load data from file
+        fileItn.load(pairs);
+
+        // copy data to fix-pairs
+        fixedPairs = new HashMap<String, String>(pairs);
+
+        // start persist-thread
+        persistThread = new FixedPersistThread();
+        persistThread.start();
     }
 
     /**
@@ -32,7 +43,7 @@ public class PeriodPersistor extends AbstractPersistor {
      * @author TigerWang1314
      *
      */
-    class NonSyncPersistThread extends Thread {
+    class FixedPersistThread extends Thread {
 
         private List<ChangeRecord> list1 = new ArrayList<ChangeRecord>();
         private List<ChangeRecord> list2 = new ArrayList<ChangeRecord>();
@@ -41,20 +52,14 @@ public class PeriodPersistor extends AbstractPersistor {
 
         private volatile boolean running;
 
-        private Map<String, String> nonsyncPairs;
-
         private int persistPeriod;
 
-        void setChange(ChangeRecord cr) {
+        void addChange(ChangeRecord cr) {
             getAddList().add(cr);
         }
 
         @Override
         public void run() {
-
-            // sync pairs
-            // nonsyncPairs = new HashMap<String, String>(pairs); // TODO
-            // complate it later
 
             // start run
             while (running) {
@@ -65,11 +70,11 @@ public class PeriodPersistor extends AbstractPersistor {
                 // set change
                 List<ChangeRecord> persistRecord = getPersistList();
                 for (ChangeRecord cr : persistRecord) {
-                    cr.change(nonsyncPairs);
+                    cr.change(fixedPairs);
                 }
 
                 // persist
-                fileItn.persist(nonsyncPairs);
+                fileItn.persist(fixedPairs);
 
                 persistRecord.clear();
 

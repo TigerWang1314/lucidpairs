@@ -16,7 +16,7 @@ public class PersistorFactory {
         if (LucidProps.TYPE_NOTIFY.equals(subProps.getType())) {
             persistor = new NotifyPersistor(fileItn);
         } else if (LucidProps.TYPE_PERIOD.equals(subProps.getType())) {
-            persistor = new PeriodPersistor(fileItn);
+            persistor = new FixedPersistor(fileItn);
         } else if (LucidProps.TYPE_REALTIME.equals(subProps.getType())) {
             persistor = new RealTimePersistor(fileItn);
         }
