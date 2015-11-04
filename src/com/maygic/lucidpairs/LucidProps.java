@@ -13,7 +13,7 @@ import com.maygic.lucidpairs.persistor.LucidPairsLoadException;
 public class LucidProps {
 
     public static final String TYPE_NOTIFY = "notify";
-    public static final String TYPE_PERIOD = "period";
+    public static final String TYPE_FIXED = "fixed";
     public static final String TYPE_REALTIME = "realtime";
 
     public static final String SUB_DEFAULT = "default";
@@ -88,6 +88,8 @@ public class LucidProps {
                     // read sub-props
                     if (kv[0].equals(PERSIST_TYPE)) {
                         sub.type = kv[1];
+                    } else {
+                        sub.props.put(kv[0], kv[1]);
                     }
                 }
             }
@@ -99,14 +101,14 @@ public class LucidProps {
 
         private String type;
 
-        private int period;
+        private Map<String, String> props = new HashMap<String, String>(2);
 
         public String getType() {
             return type;
         }
 
-        public int getPeriod() {
-            return period;
+        public String getProp(String name) {
+            return props.get(name);
         }
     }
 }

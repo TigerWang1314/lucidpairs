@@ -14,11 +14,11 @@ public class PersistorFactory {
         Persistor persistor = null;
         SubProps subProps = LucidProps.getSubProps(name);
         if (LucidProps.TYPE_NOTIFY.equals(subProps.getType())) {
-            persistor = new NotifyPersistor(fileItn);
-        } else if (LucidProps.TYPE_PERIOD.equals(subProps.getType())) {
-            persistor = new FixedPersistor(fileItn);
+            persistor = new NotifyPersistor(fileItn, subProps);
+        } else if (LucidProps.TYPE_FIXED.equals(subProps.getType())) {
+            persistor = new FixedPersistor(fileItn, subProps);
         } else if (LucidProps.TYPE_REALTIME.equals(subProps.getType())) {
-            persistor = new RealTimePersistor(fileItn);
+            persistor = new RealTimePersistor(fileItn, subProps);
         }
 
         return persistor;

@@ -7,15 +7,21 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.maygic.lucidpairs.ChangeRecord;
+import com.maygic.lucidpairs.LucidProps;
+import com.maygic.lucidpairs.LucidProps.SubProps;
 
 public class FixedPersistor extends AbstractPersistor {
+
+    private static final String PROP_PERIOD = "period";
+
+    private static final int DEFAULT_PERIOD = 10;
 
     private Map<String, String> fixedPairs;
 
     private FixedPersistThread persistThread;
 
-    public FixedPersistor(FileInteraction fileItn) {
-        super(fileItn);
+    public FixedPersistor(FileInteraction fileItn, SubProps props) {
+        super(fileItn, props);
     }
 
     @Override
@@ -32,8 +38,23 @@ public class FixedPersistor extends AbstractPersistor {
         // copy data to fix-pairs
         fixedPairs = new HashMap<String, String>(pairs);
 
+        // get period from properties
+        int period = DEFAULT_PERIOD;
+        String periodInfo = getProp(PROP_PERIOD);
+        if (periodInfo != null) {
+            try {
+                period = Integer.valueOf(periodInfo);
+            } catch (NumberFormatException e) {
+                throw new LucidPairsLoadException(
+                        "error prop " + PROP_PERIOD + " value " + periodInfo + ", it must be integer");
+            }
+            if (period <= 0) {
+                throw new LucidPairsLoadException("period must be greater than 0");
+            }
+        }
+
         // start persist-thread
-        persistThread = new FixedPersistThread();
+        persistThread = new FixedPersistThread(period);
         persistThread.start();
     }
 
@@ -52,7 +73,11 @@ public class FixedPersistor extends AbstractPersistor {
 
         private volatile boolean running;
 
-        private int persistPeriod;
+        private final int period;
+
+        FixedPersistThread(int period) {
+            this.period = period;
+        }
 
         void addChange(ChangeRecord cr) {
             getAddList().add(cr);
@@ -79,7 +104,7 @@ public class FixedPersistor extends AbstractPersistor {
                 persistRecord.clear();
 
                 try {
-                    TimeUnit.SECONDS.sleep(persistPeriod);
+                    TimeUnit.SECONDS.sleep(period);
                 } catch (InterruptedException e) {
                 }
             }
